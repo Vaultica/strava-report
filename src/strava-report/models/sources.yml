@@ -4,3 +4,4 @@ sources:
   - name: strava
     tables:
       - name: all_activities
+      - name: new_activities

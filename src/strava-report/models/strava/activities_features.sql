@@ -1,8 +1,17 @@
-{{ config(materialized='view', enabled=True) }}
+{{ config(materialized='incremental',
+          unique_key='id',
+          incremental_strategy='insert_overwrite',
+          partition_by={
+             "field": "start_date",
+             "data_type": "datetime",
+             "granularity": "day"
+          },
+          enabled=True)
+}}
 
 with source_data as (
-
   select
+    id,
     name,
     round(average_speed*3.6, 1)     as avg_speed,
     average_speed,
@@ -18,19 +27,19 @@ with source_data as (
     round(total_elevation_gain, 0) as total_elevation_gain,
     type,
     kudos_count,
-    gear.bike                 as bike,
+    gear_id,
     average_temp,
     moving_time,
     photo_count,
     athlete_count,
     comment_count,
     description
-  from {{ source('strava', 'all_activities') }} activities
-  left join {{ ref('strava_gear') }} gear
-       on activities.gear_id = gear.id
-
+  from {{ source('strava', 'new_activities') }} activities
 )
 
 select
-     *
-from source_data
+     activities.*,
+     gear.bike
+from source_data as activities
+left join {{ ref('strava_gear') }} gear
+     on activities.gear_id = gear.id

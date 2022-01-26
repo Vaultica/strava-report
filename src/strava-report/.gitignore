@@ -1,4 +1,7 @@
-
 target/
 dbt_modules/
 logs/
+strava_config.py
+client_secrets.json
+strava_activities.xlsx
+access_token.pickle
