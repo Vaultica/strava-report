@@ -12,7 +12,32 @@ from google_auth_oauthlib import flow
 
 from strava_config import MY_STRAVA_CLIENT_ID, MY_STRAVA_CLIENT_SECRET
 
-PROJECT_ID              = 'secret-compass-181513'
+PROJECT_ID      = 'secret-compass-181513'
+LAST_ACTIVITIES = 30
+
+my_cols =['id',
+          'name',
+          'average_speed',
+          'average_heartrate',
+          'average_watts',
+          'distance',
+          'elapsed_time',
+          'total_elevation_gain',
+          'type',
+          'start_date_local',
+          'kudos_count',
+          'gear_id',
+          'average_temp',
+          'moving_time',
+          'photo_count',
+          'athlete_count',
+          'comment_count',
+          'description',
+          'location_country',
+          'timezone',
+          'start_latlng',
+          'upload_id'
+          ]
 
 client = Client()
 
@@ -39,31 +64,8 @@ else:
     client.refresh_token = access_token['refresh_token']
     client.token_expires_at = access_token['expires_at']
 
-activities = client.get_activities(limit=30)
-
-my_cols =['id',
-          'name',
-          'average_speed',
-          'average_heartrate',
-          'average_watts',
-          'distance',
-          'elapsed_time',
-          'total_elevation_gain',
-          'type',
-          'start_date_local',
-          'kudos_count',
-          'gear_id',
-          'average_temp',
-          'moving_time',
-          'photo_count',
-          'athlete_count',
-          'comment_count',
-          'description',
-          'location_country',
-          'timezone',
-          'start_latlng',
-          'upload_id'
-          ]
+print(f'Fetching the last {LAST_ACTIVITIES} activities from Strava')
+activities = client.get_activities(limit=LAST_ACTIVITIES)
 
 data = []
 
@@ -71,8 +73,9 @@ for activity in activities:
     my_dict = activity.to_dict()
     data.append([my_dict.get(x) for x in my_cols])
 
+print(f'Saving activities as Excel file')
 df = pd.DataFrame(data, columns=my_cols)
 df.to_excel('strava_activities.xlsx')
 
-# Load dataset to BigQuery
+print(f'Loading activities to BigQuery')
 gbq.to_gbq(df, 'strava.new_activities', PROJECT_ID, if_exists='replace')
