@@ -14,8 +14,7 @@ from strava_config import MY_STRAVA_CLIENT_ID, MY_STRAVA_CLIENT_SECRET
 
 PROJECT_ID      = 'secret-compass-181513'
 LAST_ACTIVITIES = 30
-
-my_cols =['id',
+MY_COLS =['id',
           'name',
           'average_speed',
           'average_heartrate',
@@ -71,10 +70,10 @@ data = []
 
 for activity in activities:
     my_dict = activity.to_dict()
-    data.append([my_dict.get(x) for x in my_cols])
+    data.append([my_dict.get(x) for x in MY_COLS])
 
 print(f'Saving activities as Excel file')
-df = pd.DataFrame(data, columns=my_cols)
+df = pd.DataFrame(data, columns=MY_COLS)
 df.to_excel('strava_activities.xlsx')
 
 print(f'Loading activities to BigQuery')

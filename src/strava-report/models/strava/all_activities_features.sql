@@ -1,4 +1,4 @@
-{{ config(materialized='view', enabled=True) }}
+{{ config(materialized='view', enabled=False) }}
 
 with source_data as (
 
@@ -10,6 +10,7 @@ with source_data as (
     average_watts,
     round(distance/1000, 1)    as distance_km,
     elapsed_time,
+    justify_interval((make_interval(second => elapsed_time))) elapsed_time_interval,
     safe.parse_datetime('%Y-%m-%dT%H:%M:%S', start_date_local) as start_date,
     EXTRACT(year from safe.parse_datetime('%Y-%m-%dT%H:%M:%S', start_date_local)) as start_year,
     EXTRACT(month from safe.parse_datetime('%Y-%m-%dT%H:%M:%S', start_date_local)) as start_month,
@@ -21,6 +22,7 @@ with source_data as (
     gear.bike                 as bike,
     average_temp,
     moving_time,
+    justify_interval((make_interval(second => moving_time))) moving_time_interval,
     photo_count,
     athlete_count,
     comment_count,
