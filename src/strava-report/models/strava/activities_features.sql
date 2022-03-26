@@ -10,7 +10,7 @@
 }}
 
 with source_data as (
-  select
+  select distinct
     id,
     name,
     round(average_speed*3.6, 1)     as avg_speed,
@@ -37,6 +37,7 @@ with source_data as (
     comment_count,
     description
   from {{ source('strava', 'new_activities') }} activities
+  where id not in (select id from {{this}})
 )
 
 select

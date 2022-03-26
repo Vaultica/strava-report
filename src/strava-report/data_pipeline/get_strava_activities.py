@@ -77,4 +77,4 @@ df = pd.DataFrame(data, columns=MY_COLS)
 df.to_excel('strava_activities.xlsx')
 
 print(f'Loading activities to BigQuery')
-gbq.to_gbq(df, 'strava.new_activities', PROJECT_ID, if_exists='replace')
+gbq.to_gbq(df, 'strava.new_activities', PROJECT_ID, if_exists='append')
