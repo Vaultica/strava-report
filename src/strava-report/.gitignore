@@ -1,7 +1,23 @@
-target/
+# folders
 dbt_modules/
 logs/
-strava_config.py
+
 client_secrets.json
 strava_activities.xlsx
+
+# Strava credentials and local OAuth state
+strava_config.py
 access_token.pickle
+client_secrets.json
+*.xlsx
+
+# Python & environment files
+__pycache__/
+*.pyc
+venv/
+.env
+
+# dbt compiled files
+model/target/
+model/dbt_packages/
+model/logs/
