@@ -1,0 +1,11 @@
+strava:
+  target: prod
+  outputs:
+    prod:
+      type: bigquery
+      method: oauth
+      project: secret-compass-181513
+      dataset: strava
+      threads: 4
+      timeout_seconds: 300
+      location: europe-west2 # or US, depending on your dataset location

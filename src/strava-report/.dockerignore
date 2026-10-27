@@ -1,0 +1,11 @@
+**/access_token.pickle
+**/client_secrets.json
+**/strava_config.py
+**/*.xlsx
+**/__pycache__
+**/*.pyc
+target/
+dbt_packages/
+logs/
+.git
+.gemini
